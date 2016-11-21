@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/resources/scaffold/pageTemplate.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="page" value='#{empleadoBean.page}'/>
+        <f:event type="preRenderView" listener='#{empleadoBean.paginate}'/>
+    </f:metadata>
+
+    <ui:param name="pageTitle" value="Lista de empleados y Trabajadores"/>
+
+    <ui:define name="header">
+        Listado de Empleados y Trabajadores
+    </ui:define>
+
+    <ui:define name="subheader">
+        Opciones de búsqueda
+    </ui:define>
+
+    <ui:define name="footer"/>
+
+    <ui:define name="main">
+        <h:form id="search">
+            <f:validateBean disabled="true">
+                <h:panelGroup styleClass="search">
+
+                    <h:panelGrid columnClasses="label,component,required" columns="3">
+                        <h:outputLabel for="empleadoBeanExampleCedula" value="Cedula:"/>
+                        <h:panelGroup>
+                            <h:inputText id="empleadoBeanExampleCedula" maxLength="15" value="#{empleadoBean.example.cedula}"/>
+                            <h:message for="empleadoBeanExampleCedula" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                        
+                        <h:outputLabel for="empleadoBeanExampleDepartamento" value="Departamento:"/>
+                        <h:panelGroup>
+                            <h:inputText id="empleadoBeanExampleDepartamento" maxLength="200" value="#{empleadoBean.example.departamento}"/>
+                            <h:message for="empleadoBeanExampleDepartamento" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+
+                        <h:outputLabel for="empleadoBeanExampleNombres" value="Nombres:"/>
+                        <h:panelGroup>
+                            <h:inputText id="empleadoBeanExampleNombres" value="#{empleadoBean.example.nombres}"/>
+                            <h:message for="empleadoBeanExampleNombres" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                        
+                        <h:outputLabel for="empleadoBeanExampleNumnero" value="Número Solicitud:"/>
+                        <h:panelGroup>
+                            <h:inputText id="empleadoBeanExampleNumnero" value="#{empleadoBean.example.numberSolicitud}"/>
+                            <h:message for="empleadoBeanExampleNumnero" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                        
+                        <h:outputLabel for="direccionBeanExampleApply" value="Aplicar?:"/>
+                        <h:panelGroup>
+                            <h:selectOneMenu id="direccionBeanExampleApply" value="#{empleadoBean.example.apply}">
+                                <f:selectItem/>
+                                <f:selectItem itemLabel="Si" itemValue="true"/>
+                                <f:selectItem itemLabel="No" itemValue="false"/>
+                            </h:selectOneMenu>
+                            <h:message for="direccionBeanExampleApply" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                        
+                    </h:panelGrid>
+                    <h:panelGroup styleClass="buttons">
+                        <h:commandLink value="Buscar" action='#{empleadoBean.search}' styleClass="btn btn-primary"/>
+                        <h:commandLink value="Crear Nuevo" action='#{empleadoBean.create}' styleClass="btn btn-primary"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </f:validateBean>
+
+            <h:dataTable id="empleadoBeanPageItems" styleClass="data-table" value="#{empleadoBean.pageItems}" var="_item">
+                
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Número"/>
+                    </f:facet>
+                    <h:link outcome="/empleado/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemNumero" value="#{_item.numeroFormato}"/>
+                    </h:link>
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Cedula"/>
+                    </f:facet>
+                    <h:link outcome="/empleado/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemCedula" value="#{_item.cedula}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Nombres"/>
+                    </f:facet>
+                    <h:link outcome="/empleado/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemNombres" value="#{_item.nombres}"/>
+                    </h:link>
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Aplica?"/>
+                    </f:facet>
+                    <h:link outcome="/empleado/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemApply" value="#{_item.apply ? 'SI':'NO'}"/>
+                    </h:link>
+                </h:column>
+                
+            </h:dataTable>
+            <ui:include src="/resources/scaffold/paginator.xhtml">
+                <ui:param name="paginatorBean" value='#{empleadoBean}'/>
+            </ui:include>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{empleadoBean.id}'/>
+		<f:event type="preRenderView" listener='#{empleadoBean.retrieve}'/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="Create Empleado"/>
+
+	<ui:define name="header">
+		Empleado
+	</ui:define>
+
+	<ui:define name="subheader">
+		<c:choose>
+			<c:when test='#{!empty empleadoBean.id}'>
+				Editar
+			</c:when>
+			<c:otherwise>
+				Crear
+			</c:otherwise>
+		</c:choose>
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:form id="create">
+			<h:messages globalOnly="true" styleClass="error"/>
+
+			<h:panelGrid columnClasses="label,component,required" columns="3">
+				<h:outputLabel for="empleadoBeanEmpleadoCedula" value="Cedula:"/>
+				<h:panelGroup>
+					<h:inputText id="empleadoBeanEmpleadoCedula" maxLength="15" required="true" value="#{empleadoBean.empleado.cedula}"/>
+					<h:message for="empleadoBeanEmpleadoCedula" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText value="*"/>
+				<h:outputLabel for="empleadoBeanEmpleadoUnidad" value="Unidad:"/>
+				<h:panelGroup>
+					<h:inputText id="empleadoBeanEmpleadoUnidad" maxLength="200" value="#{empleadoBean.empleado.unidad}"/>
+					<h:message for="empleadoBeanEmpleadoUnidad" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="empleadoBeanEmpleadoDepartamento" value="Departamento:"/>
+				<h:panelGroup>
+					<h:inputText id="empleadoBeanEmpleadoDepartamento" maxLength="200" value="#{empleadoBean.empleado.departamento}"/>
+					<h:message for="empleadoBeanEmpleadoDepartamento" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="empleadoBeanEmpleadoNombres" value="Nombres:"/>
+				<h:panelGroup>
+					<h:inputText id="empleadoBeanEmpleadoNombres" required="true" value="#{empleadoBean.empleado.nombres}"/>
+					<h:message for="empleadoBeanEmpleadoNombres" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText value="*"/>
+				<h:outputLabel for="empleadoBeanEmpleadoCorreo" value="Correo:"/>
+				<h:panelGroup>
+					<h:inputText id="empleadoBeanEmpleadoCorreo" maxLength="200" value="#{empleadoBean.empleado.correo}"/>
+					<h:message for="empleadoBeanEmpleadoCorreo" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="empleadoBeanEmpleadoApply" value="Aplicar?:"/>
+				<h:panelGroup>
+					<h:selectOneMenu id="empleadoBeanEmpleadoApply" value="#{empleadoBean.empleado.apply}">
+						<f:selectItem/>
+						<f:selectItem itemLabel="SI" itemValue="true"/>
+						<f:selectItem itemLabel="NO" itemValue="false"/>
+					</h:selectOneMenu>
+					<h:message for="empleadoBeanEmpleadoApply" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<!--h:outputLabel for="empleadoBeanEmpleadoRegisterDate" value="Register Date:"/>
+				<h:panelGroup>
+					<h:inputText id="empleadoBeanEmpleadoRegisterDate" value="#{empleadoBean.empleado.registerDate}">
+						<f:convertDateTime type="date"/>
+					</h:inputText>
+					<h:message for="empleadoBeanEmpleadoRegisterDate" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="empleadoBeanEmpleadoRegisterTime" value="Register Time:"/>
+				<h:panelGroup>
+					<h:inputText id="empleadoBeanEmpleadoRegisterTime" value="#{empleadoBean.empleado.registerTime}">
+						<f:convertDateTime type="time"/>
+					</h:inputText>
+					<h:message for="empleadoBeanEmpleadoRegisterTime" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/-->
+			</h:panelGrid>
+
+			<div class="buttons">
+				<h:commandLink value="Guardar" action='#{empleadoBean.update}' styleClass="btn btn-primary"/>
+				<c:choose>
+					<c:when test='#{!empty empleadoBean.id}'>
+						<h:link value="Cancelar" outcome="view" styleClass="btn btn-primary">
+							<f:param name="id" value='#{empleadoBean.id}'/>
+						</h:link>
+						<h:commandLink value="Delete" action='#{empleadoBean.delete}' styleClass="btn btn-primary"/>
+					</c:when>
+					<c:otherwise>
+						<h:link value="Cancelar" outcome="search" styleClass="btn btn-primary"/>
+					</c:otherwise>
+				</c:choose>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

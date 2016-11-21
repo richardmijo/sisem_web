@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/resources/scaffold/pageTemplateRegister.xhtml"
+                xmlns:p="http://primefaces.org/ui"  >
+
+    <f:metadata>
+        <f:viewParam name="id" value='#{empleadoBean.id}'/>
+        <f:event type="preRenderView" listener='#{empleadoBean.retrieve}'/>
+    </f:metadata>
+    
+    <ui:param name="pageTitle" value="SISEM"/>
+    
+    <ui:define name="header">
+        <!--meta http-equiv="refresh" content="0;url=../../faces/index.html" /--> 
+        Empleado
+    </ui:define>
+    
+    <ui:param name="pageTitle" value="SISEM"/>
+
+    <ui:define name="header">
+        Empleado
+    </ui:define>
+
+    <ui:define name="subheader">
+        <c:choose>
+            <c:when test='#{!empty empleadoBean.id}'>
+                Registrar Acumulación Décimos
+            </c:when>
+            <c:otherwise>
+                Registrar Acumulación Décimos
+            </c:otherwise>
+        </c:choose>
+    </ui:define>
+
+    <ui:define name="footer"/>
+
+    <ui:define name="main">
+        <h:form id="create">
+
+            <p:growl id="growl" sticky="true" showDetail="true" globalOnly="true"/>
+
+            <h:panelGrid columnClasses="label,component,required" columns="3">
+                <h:outputLabel for="empleadoBeanEmpleadoCedula" value="Cédula:"/>
+                <h:panelGroup >
+                    <h:panelGrid columns="2">
+                        
+                        <p:inputText
+                            id="empleadoBeanEmpleadoCedula" value="#{empleadoBean.cedulaBusqueda}"
+                            disabled="#{!empty empleadoBean.empleado.id}" maxlength="10"/>
+                        <p:commandButton value="Buscar" id="bt_buscar" 
+                                         action="#{empleadoBean.findEmpleado()}"
+                                         update="growl,create,bt_guardar" icon="ui-icon-search" 
+                                         styleClass="btn btn-primary" ajax="true"
+                                         disabled="#{!empty empleadoBean.empleado.id}"
+                                         />
+                    </h:panelGrid>
+                </h:panelGroup>
+                <h:outputText />
+                
+                <h:outputLabel for="empleadoBeanEmpleadoNombres" value="Nombres:"/>
+                <h:panelGroup>
+                    <p:inputText id="empleadoBeanEmpleadoNombres" 
+                                 value="#{empleadoBean.empleado.nombres}" readonly="true"/>
+                    <h:message for="empleadoBeanEmpleadoNombres" styleClass="error"/>
+                </h:panelGroup>
+                <h:outputText />
+
+                <h:outputLabel for="empleadoBeanEmpleadoCorreo" value="Correo:"/>
+                <h:panelGroup>
+                    <p:inputText id="empleadoBeanEmpleadoCorreo" 
+                                 value="#{empleadoBean.empleado.correo}" readonly="#{!empty empleadoBean.empleado.correo}"
+                                 rendered="#{!empty empleadoBean.empleado.id}"
+                                 maxlength="200">
+                        
+                    </p:inputText>
+                    <h:message for="empleadoBeanEmpleadoCorreo" styleClass="error"/>
+                </h:panelGroup>
+                <h:outputText/>
+                
+                
+                <h:outputLabel for="empleadoBeanEmpleadoTelefono" value="Teléfono Contacto:"/>
+                <h:panelGroup>
+                    <p:inputText id="empleadoBeanEmpleadoTelefono" 
+                                 value="#{empleadoBean.empleado.telefonoContato}" 
+                                 disabled="#{empty empleadoBean.empleado.id}" maxlength="20"/>
+                    <h:message for="empleadoBeanEmpleadoTelefono" styleClass="error"/>
+                </h:panelGroup>
+                <h:outputText />
+
+                <h:outputLabel for="empleadoBeanEmpleadoUnidad" value="Unidad:"/>
+                <h:panelGroup>
+                    <p:inputText id="empleadoBeanEmpleadoUnidad" 
+                                 value="#{empleadoBean.empleado.unidad}" readonly="true"/>
+                    <h:message for="empleadoBeanEmpleadoUnidad" styleClass="error"/>
+                </h:panelGroup>
+                <h:outputText/>
+
+                <h:outputLabel for="empleadoBeanEmpleadoDepartamento" value="Departamento:"/>
+                <h:panelGroup>
+
+                    <p:inputText id="empleadoBeanEmpleadoDepartamento" 
+                                 value="#{empleadoBean.empleado.departamento}" readonly="true"/>
+                    <h:message for="empleadoBeanEmpleadoDepartamento" styleClass="error"/>
+                </h:panelGroup>
+                <h:outputText/>                               
+            </h:panelGrid>
+
+            <div class="buttons">
+                <p:commandButton value="Aplicar" id="bt_guardar" actionListener="#{empleadoBean.updateEmpleado}" update="growl,create" icon="ui-icon-disk" 
+                                 styleClass="btn btn-primary" disabled="#{empty empleadoBean.empleado.id}"
+                                 />
+
+                <p:commandButton value="Imprimir" id="bt_print" action="#{empleadoBean.executePDF}" update="growl,create" icon="ui-icon-print" 
+                                 styleClass="btn btn-primary" ajax="false" disabled="#{!empleadoBean.empleado.apply}"
+                                 rendered="#{not empty empleadoBean.empleado.numberSolicitud}"/>
+
+                <h:link value="Nuevo" outcome="register" styleClass="btn btn-primary"/>
+
+            </div>
+            <div class="buttons">
+                <h:outputText value="* Entregar el documento por duplicado y firmando en la Dirección de Recursos Humanos"/>
+                <br/>
+                <h:outputText value="* Si sus datos no constan, acercarse a la Dirección de Recursos Humanos"/>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
