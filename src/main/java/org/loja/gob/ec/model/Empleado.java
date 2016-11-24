@@ -39,6 +39,15 @@ public class Empleado implements Serializable {
     @Column(length = 200)
     private String correo;
     
+    @Column(length = 100)
+    private String cargo;
+    
+    @Column(length = 5)
+    private String estado_sistema;
+    
+    @Column(length = 30)
+    private String actual_decimos;
+    
     @Column(length = 20)
     private String telefonoContato;
 
@@ -208,6 +217,30 @@ public class Empleado implements Serializable {
 
     public void setTelefonoContato(String telefonoContato) {
         this.telefonoContato = telefonoContato;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    public String getEstado_sistema() {
+        return estado_sistema;
+    }
+
+    public void setEstado_sistema(String estado_sistema) {
+        this.estado_sistema = estado_sistema;
+    }
+
+    public String getActual_decimos() {
+        return actual_decimos;
+    }
+
+    public void setActual_decimos(String actual_decimos) {
+        this.actual_decimos = actual_decimos;
     }
     
 }

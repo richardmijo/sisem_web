@@ -14,8 +14,8 @@ import java.util.Date;
  */
 public class DataMemo {
     
-    public String getTitulo(){
-        return "\nSOLICITUD DE ACUMULACIÓN DE LA DÉCIMA CUARTA Y TERCERA REMUNERACIÓN\n\n\n";
+    public String getTitulo(String estado){
+            return "\nSOLICITUD DE "+estado+" DE LA DÉCIMA CUARTA Y TERCERA REMUNERACIÓN\n\n\n";
     }
     
     public String getFechaMemorando(Date fecha){
@@ -37,8 +37,8 @@ public class DataMemo {
         return "En su despacho.-\n\nDe mi consideración:\n\n";
     }        
     
-    public String getData(String cedula, String nombres){
-        String data="Yo, "+nombres+", portad@r de la C.I.: "+cedula+", me dirijo a usted para solicitarle se proceda con la ACUMULACIÓN DE MI DÉCIMA CUARTA Y TERCERA REMUNERACIÓN, de acuerdo con la Ley Orgánica de Justicia Laboral y Reconocimiento del Trabajo en el Hogar, emitido por la Asamblea Nacional del Ecuador, publicado en el Registro Oficial Nro. 483 de fecha 20 de abril de 2015, petición que la realizo de manera libre y voluntaria.\n\n" +
+    public String getData(String cedula, String nombres,String estado){
+        String data="Yo, "+nombres+", portad@r de la C.I.: "+cedula+", me dirijo a usted para solicitarle se proceda con la "+estado+" DE MI DÉCIMA CUARTA Y TERCERA REMUNERACIÓN, de acuerdo con la Ley Orgánica de Justicia Laboral y Reconocimiento del Trabajo en el Hogar, emitido por la Asamblea Nacional del Ecuador, publicado en el Registro Oficial Nro. 483 de fecha 20 de abril de 2015, petición que la realizo de manera libre y voluntaria.\n\n" +
                 "Por la atención que se digne dispensar a este pedido y en pleno uso de mis facultades, me suscribo.\n\n" +
                 "Atentamente,";
         return data;

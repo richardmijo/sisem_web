@@ -143,6 +143,7 @@ public class EmpleadoBean implements Serializable {
         }
     }
     
+    
     public void updateEmpleado(){
         System.out.println("esta entrando aaaaaaaaaaaaa a modificarssssssssssssssss");
         if (this.getEmpleado().getNumberSolicitud() ==  null) {
@@ -152,14 +153,32 @@ public class EmpleadoBean implements Serializable {
         }
         //this.conversation.end();
         try {
-            this.empleado.setApply(Boolean.TRUE);
-            //this.empleado.setNumberSolicitud(findCurrenRequestNumber());
             this.empleado.setRegisterDate(new Date());
             this.empleado.setRegisterTime(new Date());
-            this.entityManager.merge(this.empleado);
-            String summary = "Se ha guardado correctamente";
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
-            //return "view?faces-redirect=true&id=" + this.empleado.getId();
+            switch (this.empleado.getEstado_sistema()) {
+                case "N":
+                    this.empleado.setEstado_sistema("Y");
+                    this.empleado.setActual_decimos("MENSUALIZA DECIMO");
+                    this.entityManager.merge(this.empleado);
+                    estadoDecimo = "MENSUALIZACIÓN";
+                    String summary = "Se ha guardado correctamente";
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary));
+                    //return "view?faces-redirect=true&id=" + this.empleado.getId();\
+                    break;
+                case "Y":
+                    this.empleado.setEstado_sistema("N");
+                    this.empleado.setActual_decimos("ACUMULA DECIMO");
+                    this.entityManager.merge(this.empleado);
+                    estadoDecimo = "ACUMULACIÓN";
+                    String summary2 = "Se ha guardado correctamente";
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(summary2));
+                    break;
+                default:
+                    estadoDecimo = "";
+                    String error= "El empleado no tiene Estado_sistema";
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(error));
+                    break;
+            }
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(e.getMessage()));
@@ -365,13 +384,22 @@ public class EmpleadoBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(s,text,""));
     }
     
+    private String estadoDecimo;
     public void findEmpleado(){
+        estadoDecimo = "";
         if (this.cedulaBusqueda != null) {
             System.out.println("el valor es: "+this.cedulaBusqueda);
-            Query q = this.entityManager.createQuery("select e from Empleado e where e.cedula like :cedula ");
+            Query q = this.entityManager.createQuery("select e from Empleado e where e.cedula like :cedula");
             q.setParameter("cedula", this.cedulaBusqueda);
-            if (q.getResultList().size() > 0) {
-                this.empleado = (Empleado) q.getSingleResult();
+            List <Empleado> empleadosEncontrados = new ArrayList<>();
+            empleadosEncontrados = q.getResultList();
+            if (empleadosEncontrados.size() > 0) {
+                this.empleado = empleadosEncontrados.get(0);
+                if(this.empleado.getEstado_sistema().equals("N")){
+                    estadoDecimo = "ACUMULACIÓN";
+                }else{
+                    estadoDecimo = "MENSUALIZACIÓN";
+                }
             }else{
                 Severity ss = FacesMessage.SEVERITY_ERROR;
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(ss,"Datos no existentes","Digite su cédula"));
@@ -417,7 +445,7 @@ public class EmpleadoBean implements Serializable {
             //image.setAbsolutePosition(500f, 650f);
             document.add(image);
             
-            Paragraph p_titulo = new Paragraph(data.getTitulo(), new Font(FontFamily.HELVETICA, 12));
+            Paragraph p_titulo = new Paragraph(data.getTitulo(estadoDecimo), new Font(FontFamily.HELVETICA, 12));
             p_titulo.setAlignment(Element.ALIGN_CENTER);
             document.add(p_titulo);
                         
@@ -443,7 +471,7 @@ public class EmpleadoBean implements Serializable {
             m_doctorDesignacion.setAlignment(Element.ALIGN_LEFT);
             document.add( m_doctorDesignacion);*/                        
             
-            Paragraph p = new Paragraph(data.getData(this.getEmpleado().getCedula(), this.getEmpleado().getNombres()), new Font(FontFamily.HELVETICA, 12));
+            Paragraph p = new Paragraph(data.getData(this.getEmpleado().getCedula(), this.getEmpleado().getNombres(),estadoDecimo), new Font(FontFamily.HELVETICA, 12));
             p.setAlignment(Element.ALIGN_JUSTIFIED);
             document.add(p);
             

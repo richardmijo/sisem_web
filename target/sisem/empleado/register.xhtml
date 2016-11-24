@@ -14,25 +14,20 @@
     </f:metadata>
     
     <ui:param name="pageTitle" value="SISEM"/>
-    
-    <ui:define name="header">
-        <!--meta http-equiv="refresh" content="0;url=../../faces/index.html" /--> 
-        Empleado
-    </ui:define>
-    
-    <ui:param name="pageTitle" value="SISEM"/>
 
     <ui:define name="header">
-        Empleado
+    <h3>Realizar este proceso ÚNICAMENTE en caso que se desee cambiar la MODALIDAD de PAGO de los DÉCIMOS, a partir del mes de diciembre del 2016</h3>
+
+    <h2>Empleado</h2>
     </ui:define>
 
     <ui:define name="subheader">
         <c:choose>
             <c:when test='#{!empty empleadoBean.id}'>
-                Registrar Acumulación Décimos
+                Registrar Acumulación/Mensualización Décimos
             </c:when>
             <c:otherwise>
-                Registrar Acumulación Décimos
+                Registrar Acumulación/Mensualización Décimos
             </c:otherwise>
         </c:choose>
     </ui:define>
@@ -70,60 +65,55 @@
                 </h:panelGroup>
                 <h:outputText />
 
-                <h:outputLabel for="empleadoBeanEmpleadoCorreo" value="Correo:"/>
+                <h:outputLabel for="empleadoBeanEmpleadoCargo" value="Cargo:"/>
                 <h:panelGroup>
-                    <p:inputText id="empleadoBeanEmpleadoCorreo" 
-                                 value="#{empleadoBean.empleado.correo}" readonly="#{!empty empleadoBean.empleado.correo}"
+                    <p:inputText id="empleadoBeanEmpleadoCargo" 
+                                 value="#{empleadoBean.empleado.cargo}" readonly="#{!empty empleadoBean.empleado.cargo}"
                                  rendered="#{!empty empleadoBean.empleado.id}"
                                  maxlength="200">
                         
                     </p:inputText>
-                    <h:message for="empleadoBeanEmpleadoCorreo" styleClass="error"/>
+                    <h:message for="empleadoBeanEmpleadoCargo" styleClass="error"/>
                 </h:panelGroup>
                 <h:outputText/>
                 
-                
-                <h:outputLabel for="empleadoBeanEmpleadoTelefono" value="Teléfono Contacto:"/>
+                <h:outputLabel for="empleadoBeanEmpleadoDecimo" value="Estado Actual Décimo:"/>
                 <h:panelGroup>
-                    <p:inputText id="empleadoBeanEmpleadoTelefono" 
-                                 value="#{empleadoBean.empleado.telefonoContato}" 
-                                 disabled="#{empty empleadoBean.empleado.id}" maxlength="20"/>
-                    <h:message for="empleadoBeanEmpleadoTelefono" styleClass="error"/>
-                </h:panelGroup>
-                <h:outputText />
-
-                <h:outputLabel for="empleadoBeanEmpleadoUnidad" value="Unidad:"/>
-                <h:panelGroup>
-                    <p:inputText id="empleadoBeanEmpleadoUnidad" 
-                                 value="#{empleadoBean.empleado.unidad}" readonly="true"/>
-                    <h:message for="empleadoBeanEmpleadoUnidad" styleClass="error"/>
+                    <p:inputText id="empleadoBeanEmpleadoDecimo" 
+                                 value="#{empleadoBean.empleado.actual_decimos}" readonly="#{!empty empleadoBean.empleado.actual_decimos}"
+                                 rendered="#{!empty empleadoBean.empleado.id}"
+                                 maxlength="200">
+                        
+                    </p:inputText>
+                    <h:message for="empleadoBeanEmpleadoDecimo" styleClass="error"/>
                 </h:panelGroup>
                 <h:outputText/>
-
-                <h:outputLabel for="empleadoBeanEmpleadoDepartamento" value="Departamento:"/>
-                <h:panelGroup>
-
-                    <p:inputText id="empleadoBeanEmpleadoDepartamento" 
-                                 value="#{empleadoBean.empleado.departamento}" readonly="true"/>
-                    <h:message for="empleadoBeanEmpleadoDepartamento" styleClass="error"/>
-                </h:panelGroup>
-                <h:outputText/>                               
+                                                      
             </h:panelGrid>
 
             <div class="buttons">
-                <p:commandButton value="Aplicar" id="bt_guardar" actionListener="#{empleadoBean.updateEmpleado}" update="growl,create" icon="ui-icon-disk" 
+                <p:commandButton value="Cambiar Décimo" id="bt_guardar" actionListener="#{empleadoBean.updateEmpleado}" update="growl,create" icon="ui-icon-disk" 
                                  styleClass="btn btn-primary" disabled="#{empty empleadoBean.empleado.id}"
-                                 />
+                                 rendered="#{empleadoBean.empleado.numberSolicitud == null}" >
+                        <p:confirm header="Confirmación" message="Está seguro de cambiar el estado actual de sus décimos?" 
+                                               icon="ui-icon-alert" />
+                                 
+                 </p:commandButton>
+                
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                </p:confirmDialog>
+                
+                <p:commandButton value="Imprimir Solicitud" id="bt_print" action="#{empleadoBean.executePDF}" update="growl,create" icon="ui-icon-print" 
+                                 styleClass="btn btn-primary" ajax="false" rendered="#{empleadoBean.empleado.numberSolicitud != null}" />
 
-                <p:commandButton value="Imprimir" id="bt_print" action="#{empleadoBean.executePDF}" update="growl,create" icon="ui-icon-print" 
-                                 styleClass="btn btn-primary" ajax="false" disabled="#{!empleadoBean.empleado.apply}"
-                                 rendered="#{not empty empleadoBean.empleado.numberSolicitud}"/>
-
-                <h:link value="Nuevo" outcome="register" styleClass="btn btn-primary"/>
+                <p:spacer width="20" />
+                <h:link value="Nueva Búsqueda" outcome="register" styleClass="btn btn-primary" disabled="#{empty empleadoBean.empleado.id}" />
 
             </div>
             <div class="buttons">
-                <h:outputText value="* Entregar el documento por duplicado y firmando en la Dirección de Recursos Humanos"/>
+                <h:outputText value="* Entregar el documento por duplicado y firmando en la Dirección de Recursos Humanos para su validez"/>
                 <br/>
                 <h:outputText value="* Si sus datos no constan, acercarse a la Dirección de Recursos Humanos"/>
             </div>
