@@ -26,7 +26,7 @@ public class DataMemo {
     }
     
     public String getDoctor(){
-        return "Doctor\nJosé Bolívar Castillo Vivanco";
+        return "Ing.\nJorge Bailón Abad";
     }
     
     public String getDoctorDesignacion(){
